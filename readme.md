@@ -2,7 +2,9 @@
 
 This project is a web-based, Tetris-like puzzle game designed with accessibility as a primary focus. It allows users to play the game entirely without using their hands, offering control through both head movements and voice commands.
 
-The application uses a Python backend with Flask to handle real-time computer vision and speech recognition, streaming the results to a JavaScript frontend via WebSockets.
+![Kinetic Cascade Demo](demo.gif)
+
+_A demonstration of the game being controlled via head movements and voice commands._
 
 ---
 
@@ -38,6 +40,9 @@ For the application to run correctly, your project must follow this folder struc
 project-folder/
 ├── app.py
 ├── requirements.txt
+│
+├── assets/
+│   └── demo.gif
 │
 ├── vosk-model-small-en-us-0.15/   <-- The downloaded Vosk model folder
 │   ├── ... (model files)
@@ -100,8 +105,6 @@ Install all the required Python libraries using the `requirements.txt` file. Thi
 ```bash
 pip install -r requirements.txt
 ```
-
-**Note:** If `PyAudio` (a dependency of some libraries) fails on Windows, you may need to install [Microsoft C++ Build Tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/).
 
 ---
 
