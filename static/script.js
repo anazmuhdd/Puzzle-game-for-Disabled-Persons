@@ -6,6 +6,10 @@ const gameOverElement = document.getElementById("game-over");
 const playAgainButton = document.getElementById("play-again");
 const trackerFeed = document.getElementById("head-tracker-feed");
 
+// --- NEW: Get the modal and start button elements ---
+const startupModal = document.getElementById("startup-modal");
+const startButton = document.getElementById("start-game-button");
+
 // --- WebSocket connection setup ---
 const socket = io();
 socket.on("connect", () => {
@@ -36,20 +40,15 @@ socket.on("control_command", (data) => {
   lastHeadAction = newAction;
 });
 
-// --- UPDATED: Voice Command Control Logic with Cooldown ---
-let canProcessVoice = true; // Flag to enable/disable voice commands
-const voiceCooldown = 500; // Cooldown in milliseconds (half a second)
+// --- Voice Command Control Logic with Cooldown ---
+let canProcessVoice = true;
+const voiceCooldown = 500;
 
 socket.on("voice_command", (data) => {
-  // Exit if game is over or if the command is on cooldown
   if (isGameOver || !canProcessVoice) return;
-
-  const command = data.command.trim(); // Trim whitespace from the command
+  const command = data.command.trim();
   console.log("Voice command received:", command);
-
   let commandProcessed = false;
-
-  // Use exact matching for precision
   if (command === "left") {
     piece.x--;
     if (collides(piece, board)) piece.x++;
@@ -65,8 +64,6 @@ socket.on("voice_command", (data) => {
     pieceDrop();
     commandProcessed = true;
   }
-
-  // If a valid command was used, start the cooldown timer
   if (commandProcessed) {
     canProcessVoice = false;
     setTimeout(() => {
@@ -75,7 +72,7 @@ socket.on("voice_command", (data) => {
   }
 });
 
-// --- Game Constants & Logic (The rest of the file is unchanged) ---
+// --- Game Constants & Logic (This section is unchanged) ---
 const COLS = 10,
   ROWS = 20,
   BLOCK_SIZE = 30;
@@ -264,7 +261,19 @@ function update(time = 0) {
 function createBoard() {
   return Array.from({ length: ROWS }, () => Array(COLS).fill(0));
 }
+
+// --- Event Listeners & Game Start ---
+
 playAgainButton.addEventListener("click", () => {
   resetGame();
 });
-resetGame();
+
+// NEW: Event listener for the main start button on the popup
+startButton.addEventListener("click", () => {
+  startupModal.style.display = "none"; // Hide the popup
+  resetGame(); // Start the game
+  // Note: We only call resetGame() here, not when the page loads
+});
+
+// IMPORTANT: The final resetGame() call that was here is now GONE.
+// The game will not start until the user clicks the button.

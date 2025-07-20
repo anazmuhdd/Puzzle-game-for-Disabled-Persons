@@ -9,26 +9,38 @@
 </head>
 <body>
 
+    <div id="startup-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h1>Welcome to Accessible Blocks</h1>
+            <div class="instructions">
+                <h3>How to Play</h3>
+                <p>Control the falling blocks using either your head or your voice.</p>
+                
+                <h4><span class="icon">🧠</span> Head Controls</h4>
+                <ul>
+                    <li><strong>Tilt Left/Right:</strong> Moves the block horizontally.</li>
+                    <li><strong>Tilt Up:</strong> Rotates the block.</li>
+                    <li><strong>Tilt Down:</strong> Drops the block one step.</li>
+                </ul>
+                
+                <h4><span class="icon">🎙️</span> Voice Controls</h4>
+                <ul>
+                    <li>Say "<strong>left</strong>", "<strong>right</strong>", "<strong>rotate</strong>", or "<strong>drop</strong>".</li>
+                </ul>
+            </div>
+            <button id="start-game-button">Start New Game</button>
+        </div>
+    </div>
     <div class="main-column">
         <h1>Falling Blocks</h1>
         <canvas id="game-board" width="300" height="600"></canvas>
     </div>
-
     <div class="main-column info-panel">
         <h2>Control Feed</h2>
         <img id="head-tracker-feed" alt="Head tracking feed">
-        
         <h2>Score</h2>
         <p id="score">0</p>
-        
-        <h2>Instructions</h2>
-        <p>
-            Tilt Up: Change shape orientation <br>
-            Tilt Left: Move Left<br>
-            Tilt Right: Move Right<br>
-        </p>
     </div>
-
     <div id="game-over" class="hidden">
         <h2>GAME OVER</h2>
         <button id="play-again">Play Again</button>
