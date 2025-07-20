@@ -1,4 +1,4 @@
-# Accessible Falling Blocks Game
+# Kinetic Cascade Game
 
 This project is a web-based, Tetris-like puzzle game designed with accessibility as a primary focus. It allows users to play the game entirely without using their hands, offering control through both head movements and voice commands.
 

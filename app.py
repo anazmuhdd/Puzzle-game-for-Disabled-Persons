@@ -25,18 +25,12 @@ MODEL_PATH = "vosk-model-small-en-us-0.15"
 try:
     model = vosk.Model(MODEL_PATH)
 except Exception as e:
-    print(f"Error loading Vosk model from '{MODEL_PATH}'.")
+    print(f"Error loading Vosk model from '{MODEL_PATH}'. Please ensure it's downloaded and in the correct folder.")
     exit(1)
 
 SAMPLE_RATE = 16000
-
-# --- NEW: Define a specific list of words for the recognizer ---
-# This makes recognition much more accurate for our specific use case.
 COMMAND_WORDS = ["left", "right", "up", "down", "rotate", "drop"]
-
-# --- MODIFIED: Pass the command words to the recognizer ---
 recognizer = vosk.KaldiRecognizer(model, SAMPLE_RATE, json.dumps(COMMAND_WORDS))
-
 
 def audio_callback(indata, frames, time, status):
     if status: print(status, flush=True)
@@ -66,25 +60,52 @@ def video_processing_thread():
         jpg_as_text = base64.b64encode(buffer).decode('utf-8')
         socketio.emit('video_feed', {'image': jpg_as_text})
         socketio.emit('control_command', {'action': status})
-        # Optional: Increase sleep time slightly to give more CPU time to the audio thread
-        socketio.sleep(0.08) # Roughly 12 FPS
+        socketio.sleep(0.08) # ~12 FPS to free up CPU
 
+# --- UPDATED: Voice recognition thread with low-latency logic ---
 def voice_recognition_thread():
+    """Handles live voice recognition with improved responsiveness."""
     print("Starting voice recognition thread...")
+    command_sent_this_utterance = False
+    
     try:
         with sd.RawInputStream(samplerate=SAMPLE_RATE, blocksize=8000, device=None, dtype='int16', channels=1, callback=audio_callback):
             while True:
                 data = q.get()
+                
+                # Check for final result (end of a phrase)
                 if recognizer.AcceptWaveform(data):
                     result = json.loads(recognizer.Result())
                     if result.get("text"):
-                        command = result["text"]
-                        print("Voice Command Detected:", command)
-                        socketio.emit('voice_command', {'command': command})
+                        command = result["text"].strip()
+                        print("Final Command:", command)
+                        # If we haven't already acted on a partial result,
+                        # act on the final one now.
+                        if not command_sent_this_utterance and command in COMMAND_WORDS:
+                             socketio.emit('voice_command', {'command': command})
+                    # Reset the flag for the next spoken phrase
+                    command_sent_this_utterance = False
+                else:
+                    # Check for partial result (while still speaking)
+                    partial_result = json.loads(recognizer.PartialResult())
+                    if partial_result.get("partial"):
+                        partial_text = partial_result["partial"].strip()
+                        print(f"Partial: {partial_text}", end='\r')
+                        
+                        # If we haven't sent a command yet for this phrase
+                        # AND the partial text is a valid command word
+                        if not command_sent_this_utterance and partial_text in COMMAND_WORDS:
+                            print(f"\nActing on partial command: '{partial_text}'")
+                            socketio.emit('voice_command', {'command': partial_text})
+                            # Set the flag to true so we don't send more commands
+                            # for this same spoken phrase (e.g., "left left left")
+                            command_sent_this_utterance = True
+
     except Exception as e:
         print(f"Error in voice recognition thread: {e}")
 
-# --- Flask Routes and WebSocket Events ---
+
+# --- Flask Routes and WebSocket Events (Unchanged) ---
 @app.route('/')
 def index():
     return render_template('index.html')
