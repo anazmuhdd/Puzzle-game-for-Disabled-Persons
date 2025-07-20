@@ -1,0 +1,12 @@
+Flask==3.0.0
+Flask-SocketIO==5.3.6
+Werkzeug==3.0.1
+opencv-python==4.8.0.76
+mediapipe==0.10.11
+tensorflow==2.15.0
+jax==0.4.23
+jaxlib==0.4.23
+ml-dtypes==0.2.0
+vosk==0.3.45
+sounddevice==0.4.6
+numpy==1.26.4
