@@ -1,0 +1,114 @@
+/* Import a clean font from Google Fonts (Optional but nice) */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+body {
+    /* New space-themed gradient background */
+    background: linear-gradient(135deg, #1d2b3a 0%, #3e516b 100%);
+    color: #f0f8ff; /* AliceBlue - a softer white */
+    font-family: 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+    /* --- Main Layout Change: Side-by-side split screen --- */
+    display: flex;
+    flex-direction: row; /* Change from column to row */
+    align-items: center;
+    justify-content: center;
+    gap: 50px; /* Space between the two columns */
+    height: 100vh; /* Fill the entire screen height */
+    margin: 0;
+    overflow: hidden; /* Prevent scrolling */
+}
+
+h1 {
+    font-size: 3em;
+    color: #ffffff;
+    text-shadow: 0 0 10px #00aaff, 0 0 20px #00aaff; /* Neon glow effect */
+    margin-bottom: 20px;
+}
+
+h2 {
+    color: #00d9ff;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    padding-bottom: 5px;
+    margin-top: 20px;
+}
+
+/* Styling for the main columns */
+.main-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.info-panel {
+    width: 300px; /* Give the info panel a fixed width */
+    height: 600px; /* Match the height of the game board */
+    background-color: rgba(0, 0, 0, 0.3); /* Dark, semi-transparent panel */
+    padding: 20px;
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 20px rgba(0, 191, 255, 0.3); /* Soft blue glow */
+}
+
+#game-board {
+    border: 2px solid #00d9ff; /* Bright blue border */
+    background-color: #000;
+    border-radius: 5px;
+    box-shadow: 0 0 25px rgba(0, 191, 255, 0.5); /* Stronger glow for focus */
+}
+
+#head-tracker-feed {
+    width: 100%; 
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    background-color: #000;
+    margin-bottom: 15px;
+    border-radius: 5px;
+}
+
+#score {
+    font-size: 2.5em;
+    font-weight: bold;
+    color: #39ff14; /* Bright neon green */
+    text-shadow: 0 0 8px #39ff14;
+    margin: 10px 0;
+}
+
+/* Game Over message is unchanged but will look good on the new background */
+#game-over {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.85);
+    padding: 30px 50px;
+    border-radius: 10px;
+    text-align: center;
+    border: 2px solid #ff4136;
+    box-shadow: 0 0 20px #ff4136;
+}
+
+#game-over h2 {
+    color: #ff4136;
+    text-shadow: 0 0 10px #ff4136;
+}
+
+#play-again {
+    padding: 10px 20px;
+    font-size: 1em;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    background-color: #00aaff;
+    color: white;
+    font-weight: bold;
+    margin-top: 10px;
+    transition: background-color 0.3s;
+}
+
+#play-again:hover {
+    background-color: #0077b3;
+}
+
+.hidden {
+    display: none;
+}
